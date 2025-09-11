@@ -1,0 +1,23 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+h1 {
+  margin-bottom: 6px;
+}
+#charts {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.chart {
+  width: 100%;
+  max-width: 700px;
+  height: 400px;
+  border: 1px solid #eee;
+  padding: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.controls {
+  margin-bottom: 12px;
+}
