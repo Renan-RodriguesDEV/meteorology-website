@@ -1,23 +1,885 @@
+/* Reset e base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+  color: #e0e6ed;
+  min-height: 100vh;
+  line-height: 1.6;
 }
-h1 {
-  margin-bottom: 6px;
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
 }
-#charts {
+
+/* Header */
+.header {
   display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 1px solid #2a2a3e;
 }
+
+.header-content h1 {
+  font-size: 2.2rem;
+  color: #64ffda;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-content h1 i {
+  font-size: 2rem;
+}
+
+.subtitle {
+  color: #8892b0;
+  font-size: 1rem;
+}
+
+/* Header navigation */
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(100, 255, 218, 0.1);
+  border-radius: 20px;
+  border: 1px solid #64ffda;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-dot.online {
+  background: #64ffda;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Current Weather Cards */
+.current-weather {
+  margin-bottom: 40px;
+}
+
+.weather-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.weather-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.weather-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #64ffda, #4fc3f7);
+}
+
+.weather-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(100, 255, 218, 0.3);
+}
+
+.weather-card.temperature::before {
+  background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+}
+
+.weather-card.humidity::before {
+  background: linear-gradient(90deg, #4fc3f7, #29b6f6);
+}
+
+.weather-card.time::before {
+  background: linear-gradient(90deg, #ffa726, #ffb74d);
+}
+
+.weather-card.status::before {
+  background: linear-gradient(90deg, #64ffda, #4fc3f7);
+}
+
+.weather-icon {
+  font-size: 2.5rem;
+  color: #64ffda;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(100, 255, 218, 0.1);
+  border-radius: 12px;
+}
+
+.weather-card.temperature .weather-icon {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.weather-card.humidity .weather-icon {
+  color: #4fc3f7;
+  background: rgba(79, 195, 247, 0.1);
+}
+
+.weather-card.time .weather-icon {
+  color: #ffa726;
+  background: rgba(255, 167, 38, 0.1);
+}
+
+.weather-info h3 {
+  font-size: 0.9rem;
+  color: #8892b0;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.weather-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e0e6ed;
+}
+
+.weather-value.small {
+  font-size: 1.2rem;
+}
+
+/* Controls Section */
+.controls-section {
+  margin-bottom: 40px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8892b0;
+  font-weight: 500;
+}
+
+.control-group i {
+  color: #64ffda;
+}
+
+select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 10px 15px;
+  color: #e0e6ed;
+  font-size: 0.9rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+select:hover,
+select:focus {
+  border-color: #64ffda;
+  background: rgba(100, 255, 218, 0.1);
+}
+
+select option {
+  background: #1a1a2e;
+  color: #e0e6ed;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #64ffda, #4fc3f7);
+  color: #0f0f23;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.refresh-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(100, 255, 218, 0.3);
+}
+
+.refresh-btn:active {
+  transform: translateY(0);
+}
+
+/* Charts Section */
+.charts-section {
+  margin-bottom: 40px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 30px;
+}
+
+.chart-container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 25px;
+  transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(100, 255, 218, 0.3);
+}
+
+.chart-container h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #64ffda;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.chart-container h3 i {
+  font-size: 1.2rem;
+}
+
 .chart {
   width: 100%;
-  max-width: 700px;
   height: 400px;
-  border: 1px solid #eee;
-  padding: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
 }
-.controls {
-  margin-bottom: 12px;
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px 0;
+  border-top: 1px solid #2a2a3e;
+  color: #8892b0;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .header-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .weather-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-card {
+    padding: 20px;
+  }
+
+  .weather-value {
+    font-size: 1.5rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .chart {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .weather-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .weather-icon {
+    margin-bottom: 10px;
+  }
+}
+
+/* Loading Animation */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(100, 255, 218, 0.3);
+  border-radius: 50%;
+  border-top-color: #64ffda;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== TEAM PAGE STYLES ===== */
+
+/* Navigation */
+.navigation {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(100, 255, 218, 0.1);
+  border: 1px solid rgba(100, 255, 218, 0.3);
+  border-radius: 8px;
+  color: #64ffda;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: rgba(100, 255, 218, 0.2);
+  border-color: rgba(100, 255, 218, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Team Sections */
+.team-section {
+  margin-bottom: 50px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #64ffda;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(100, 255, 218, 0.3);
+}
+
+.section-title i {
+  font-size: 2.2rem;
+}
+
+/* Team Grid */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+/* Team Cards */
+.team-card {
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(100, 255, 218, 0.2);
+  border-radius: 15px;
+  padding: 30px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.team-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #64ffda, #4fc3f7, #ab47bc);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.team-card:hover::before {
+  opacity: 1;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(100, 255, 218, 0.4);
+  box-shadow: 0 10px 30px rgba(100, 255, 218, 0.1);
+}
+
+.team-card.professor::before {
+  background: linear-gradient(90deg, #ffd700, #ff6b35);
+}
+
+.team-card.student::before {
+  background: linear-gradient(90deg, #64ffda, #4fc3f7);
+}
+
+/* Team Avatar */
+.team-avatar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.team-avatar i {
+  font-size: 4rem;
+  color: #64ffda;
+  background: rgba(100, 255, 218, 0.1);
+  border-radius: 50%;
+  padding: 20px;
+  border: 2px solid rgba(100, 255, 218, 0.3);
+}
+
+.team-card.professor .team-avatar i {
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+/* Team Info */
+.team-info h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #e0e6ed;
+}
+
+.team-role {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #64ffda;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.team-card.professor .team-role {
+  color: #ffd700;
+}
+
+.team-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(224, 230, 237, 0.8);
+  margin-bottom: 20px;
+}
+
+/* Contact Info */
+.team-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: rgba(224, 230, 237, 0.7);
+}
+
+.contact-item i {
+  color: #64ffda;
+  font-size: 1rem;
+}
+
+/* Specialties */
+.team-specialties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.specialty {
+  background: rgba(100, 255, 218, 0.1);
+  border: 1px solid rgba(100, 255, 218, 0.3);
+  border-radius: 15px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  color: #64ffda;
+  font-weight: 500;
+}
+
+/* Project Info */
+.project-info {
+  margin: 50px 0;
+}
+
+.project-card {
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(100, 255, 218, 0.2);
+  border-radius: 15px;
+  padding: 40px;
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  border-color: rgba(100, 255, 218, 0.4);
+  box-shadow: 0 10px 30px rgba(100, 255, 218, 0.1);
+}
+
+.project-icon {
+  flex-shrink: 0;
+}
+
+.project-icon i {
+  font-size: 3rem;
+  color: #64ffda;
+  background: rgba(100, 255, 218, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid rgba(100, 255, 218, 0.3);
+}
+
+.project-content h3 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #64ffda;
+}
+
+.project-content p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(224, 230, 237, 0.8);
+  margin-bottom: 20px;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tech-tag {
+  background: rgba(100, 255, 218, 0.1);
+  border: 1px solid rgba(100, 255, 218, 0.3);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: #64ffda;
+  font-weight: 500;
+}
+
+/* Acknowledgments Section */
+.acknowledgments-section {
+  margin: 50px 0;
+}
+
+.acknowledgments-card {
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 15px;
+  padding: 40px;
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.acknowledgments-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ffd700, #ff6b35, #e91e63);
+  opacity: 1;
+}
+
+.acknowledgments-card:hover {
+  border-color: rgba(255, 215, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+}
+
+.acknowledgments-icon {
+  flex-shrink: 0;
+}
+
+.acknowledgments-icon i {
+  font-size: 3rem;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  animation: heartbeat 2s infinite;
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.1);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+.acknowledgments-content h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #ffd700;
+  text-align: center;
+}
+
+.acknowledgments-content p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: rgba(224, 230, 237, 0.9);
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+.acknowledgments-content strong {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.university-info {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.university-badge {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 15px;
+  padding: 20px 30px;
+  transition: all 0.3s ease;
+}
+
+.university-badge:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 215, 0, 0.5);
+  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.2);
+}
+
+.university-badge i {
+  font-size: 2.5rem;
+  color: #ffd700;
+}
+
+.badge-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.university-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffd700;
+}
+
+.university-location {
+  font-size: 0.9rem;
+  color: rgba(224, 230, 237, 0.7);
+  font-style: italic;
+}
+
+/* Footer */
+.footer {
+  margin-top: 50px;
+  padding: 30px 0;
+  border-top: 1px solid rgba(42, 42, 62, 0.8);
+  text-align: center;
+}
+
+.footer-content p {
+  color: rgba(224, 230, 237, 0.6);
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .team-card {
+    padding: 20px;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  .section-title i {
+    font-size: 1.8rem;
+  }
+
+  .project-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .team-contact {
+    align-items: center;
+  }
+
+  .contact-item {
+    justify-content: center;
+  }
+
+  .team-specialties {
+    justify-content: center;
+  }
+
+  .project-tech {
+    justify-content: center;
+  }
+
+  .acknowledgments-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .acknowledgments-content {
+    text-align: center;
+  }
+
+  .acknowledgments-content p {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .team-card {
+    padding: 15px;
+  }
+
+  .project-card {
+    padding: 20px 15px;
+  }
+
+  .acknowledgments-card {
+    padding: 20px 15px;
+  }
+
+  .acknowledgments-content h3 {
+    font-size: 1.5rem;
+  }
+
+  .university-badge {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+    padding: 15px 20px;
+  }
 }

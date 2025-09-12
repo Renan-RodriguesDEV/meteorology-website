@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <title>IoT - Temperatura & Umidade</title>
+    <title>Estação Meteorológica IoT - ESP32</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="/static/css/style.css" />
     <!-- Google Charts loader -->
@@ -10,31 +10,144 @@
       type="text/javascript"
       src="https://www.gstatic.com/charts/loader.js"
     ></script>
+    <!-- Boxicons para ícones -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>IoT - Temperatura & Umidade (ESP32)</h1>
-    <div class="controls">
-      <label
-        >Últimas leituras a mostrar:
-        <select id="limit">
-          <option value="50" selected>50</option>
-          <option value="100">100</option>
-          <option value="288">288</option>
-        </select>
-      </label>
-      <button id="refreshBtn">Atualizar</button>
-      <span id="lastUpdate" style="margin-left: 12px; color: #555"></span>
-    </div>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <h1><i class="bx bx-devices"></i> Estação Meteorológica IoT</h1>
+          <p class="subtitle">Monitoramento em tempo real com ESP32</p>
+        </div>
+        <div class="navigation">
+          <a href="/team" class="nav-link">
+            <i class="bx bx-group"></i>
+            Equipe
+          </a>
+          <div class="status-indicator">
+            <span class="status-dot online"></span>
+            <span>Online</span>
+          </div>
+        </div>
+      </header>
 
-    <div id="charts">
-      <div id="chart_24h_temp" class="chart"></div>
-      <div id="chart_24h_hum" class="chart"></div>
+      <!-- Painel de dados atuais -->
+      <section class="current-weather">
+        <div class="weather-cards">
+          <div class="weather-card temperature">
+            <div class="weather-icon">
+              <i class="bx bx-thermometer"></i>
+            </div>
+            <div class="weather-info">
+              <h3>Temperatura</h3>
+              <span id="current-temp" class="weather-value">--°C</span>
+            </div>
+          </div>
 
-      <div id="chart_15d_temp" class="chart"></div>
-      <div id="chart_15d_hum" class="chart"></div>
+          <div class="weather-card humidity">
+            <div class="weather-icon">
+              <i class="bx bx-droplet"></i>
+            </div>
+            <div class="weather-info">
+              <h3>Umidade</h3>
+              <span id="current-humidity" class="weather-value">--%</span>
+            </div>
+          </div>
 
-      <div id="chart_monthly_temp" class="chart"></div>
-      <div id="chart_monthly_hum" class="chart"></div>
+          <div class="weather-card time">
+            <div class="weather-icon">
+              <i class="bx bx-time"></i>
+            </div>
+            <div class="weather-info">
+              <h3>Última Leitura</h3>
+              <span id="last-reading-time" class="weather-value">--</span>
+            </div>
+          </div>
+
+          <div class="weather-card status">
+            <div class="weather-icon">
+              <i class="bx bx-refresh"></i>
+            </div>
+            <div class="weather-info">
+              <h3>Atualização</h3>
+              <span id="lastUpdate" class="weather-value small">--</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Controles -->
+      <section class="controls-section">
+        <div class="controls">
+          <div class="control-group">
+            <label for="period-select">
+              <i class="bx bx-calendar"></i>
+              Período de dados:
+            </label>
+            <select id="period-select">
+              <option value="1h">Última hora</option>
+              <option value="24h" selected>Últimas 24 horas</option>
+              <option value="15d">Últimos 15 dias</option>
+              <option value="30d">Últimos 30 dias</option>
+            </select>
+          </div>
+          <button id="refreshBtn" class="refresh-btn">
+            <i class="bx bx-refresh"></i>
+            Atualizar
+          </button>
+        </div>
+      </section>
+
+      <!-- Gráficos -->
+      <section class="charts-section">
+        <div class="charts-grid">
+          <!-- Gráficos de 24 horas -->
+          <div class="chart-container">
+            <h3><i class="bx bx-line-chart"></i> Temperatura - 24h</h3>
+            <div id="chart_24h_temp" class="chart"></div>
+          </div>
+
+          <div class="chart-container">
+            <h3><i class="bx bx-bar-chart"></i> Umidade - 24h</h3>
+            <div id="chart_24h_hum" class="chart"></div>
+          </div>
+
+          <!-- Gráficos de 15 dias -->
+          <div class="chart-container">
+            <h3><i class="bx bx-trending-up"></i> Temperatura - 15 dias</h3>
+            <div id="chart_15d_temp" class="chart"></div>
+          </div>
+
+          <div class="chart-container">
+            <h3><i class="bx bx-water"></i> Umidade - 15 dias</h3>
+            <div id="chart_15d_hum" class="chart"></div>
+          </div>
+
+          <!-- Gráficos mensais -->
+          <div class="chart-container">
+            <h3><i class="bx bx-scatter-chart"></i> Temperatura - 30 dias</h3>
+            <div id="chart_monthly_temp" class="chart"></div>
+          </div>
+
+          <div class="chart-container">
+            <h3><i class="bx bx-stats"></i> Umidade - 30 dias</h3>
+            <div id="chart_monthly_hum" class="chart"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>
+          &copy; 2025 Estação Meteorológica IoT | Desenvolvido com ESP32 e
+          FastAPI
+        </p>
+      </footer>
     </div>
 
     <script src="/static/js/main.js"></script>
