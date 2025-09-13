@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Efemérides Solares - Estação Meteorológica IoT</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="header-content">
+          <h1><i class="bx bx-sun"></i> Efemérides Solares</h1>
+          <p class="subtitle">
+            Horários de nascer, pôr do sol e duração do dia
+          </p>
+        </div>
+        <div class="navigation">
+          <a href="/" class="nav-link"><i class="bx bx-home"></i> Dashboard</a>
+          <a href="/mean" class="nav-link"
+            ><i class="bx bx-bar-chart-alt-2"></i> Médias</a
+          >
+          <a href="/after-day" class="nav-link"
+            ><i class="bx bx-calendar"></i> Dia Anterior</a
+          >
+          <a href="/team" class="nav-link"
+            ><i class="bx bx-group"></i> Equipe</a
+          >
+        </div>
+      </header>
+
+      <section class="summary-section">
+        <div class="summary-cards">
+          <div class="summary-card">
+            <div class="summary-icon"><i class="bx bx-chevrons-up"></i></div>
+            <div class="summary-info">
+              <h3>Nascer do Sol (Hoje)</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="sunrise-today">--:--</span>
+              </div>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon"><i class="bx bx-chevrons-down"></i></div>
+            <div class="summary-info">
+              <h3>Pôr do Sol (Hoje)</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="sunset-today">--:--</span>
+              </div>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon"><i class="bx bx-time-five"></i></div>
+            <div class="summary-info">
+              <h3>Duração do Dia</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="daylength-today">-- h</span>
+              </div>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon"><i class="bx bx-history"></i></div>
+            <div class="summary-info">
+              <h3>Ontem (Nascer / Pôr)</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="sunrise-yesterday">--:--</span>
+                <span
+                  id="sunset-yesterday"
+                  style="font-size: 0.9rem; color: #8892b0"
+                  >--:--</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls-section">
+        <div class="controls">
+          <div class="control-group">
+            <label for="date-input"
+              ><i class="bx bx-calendar"></i> Data específica:</label
+            >
+            <input type="date" id="date-input" />
+          </div>
+          <button id="loadDateBtn" class="refresh-btn">
+            <i class="bx bx-search"></i> Consultar
+          </button>
+          <button id="refreshSunBtn" class="refresh-btn">
+            <i class="bx bx-refresh"></i> Atualizar
+          </button>
+        </div>
+      </section>
+
+      <section class="technical-info">
+        <div class="info-card">
+          <div class="info-icon"><i class="bx bx-info-circle"></i></div>
+          <div class="info-content">
+            <h3>Sobre os Cálculos</h3>
+            <p>
+              Os horários são calculados localmente usando fórmulas
+              simplificadas do NOAA para a posição solar (aproximação).
+              Latitude/longitude fixas podem ser ajustadas no backend.
+            </p>
+            <div class="info-details">
+              <div class="detail-item">
+                <strong>Nascer do Sol:</strong> Primeiro aparecimento do disco
+                solar (refração aproximada)
+              </div>
+              <div class="detail-item">
+                <strong>Pôr do Sol:</strong> Desaparecimento completo do disco
+              </div>
+              <div class="detail-item">
+                <strong>Duração do Dia:</strong> Intervalo entre nascer e pôr
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-content">
+          <p>&copy; 2025 Estação Meteorológica IoT - Efemérides</p>
+          <p>Dados solares calculados localmente</p>
+        </div>
+      </footer>
+    </div>
+    <script src="/static/js/sun.js"></script>
+  </body>
+</html>

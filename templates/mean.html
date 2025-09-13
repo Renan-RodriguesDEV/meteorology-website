@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Médias e Estatísticas - Estação Meteorológica IoT</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <!-- Google Charts loader -->
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <!-- Boxicons para ícones -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <h1><i class="bx bx-bar-chart-alt-2"></i> Médias e Estatísticas</h1>
+          <p class="subtitle">Análise estatística dos dados meteorológicos</p>
+        </div>
+        <div class="navigation">
+          <a href="/" class="nav-link">
+            <i class="bx bx-home"></i>
+            Dashboard
+          </a>
+          <a href="/sun" class="nav-link">
+            <i class="bx bx-sun"></i>
+            Sol
+          </a>
+          <a href="/after-day" class="nav-link">
+            <i class="bx bx-calendar"></i>
+            Dia Anterior
+          </a>
+          <a href="/team" class="nav-link">
+            <i class="bx bx-group"></i>
+            Equipe
+          </a>
+        </div>
+      </header>
+
+      <!-- Cards de Resumo -->
+      <section class="summary-section">
+        <div class="summary-cards">
+          <div class="summary-card temperature">
+            <div class="summary-icon">
+              <i class="bx bx-thermometer"></i>
+            </div>
+            <div class="summary-info">
+              <h3>Temperatura (15 dias)</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="temp-15d-avg">--°C</span>
+                <div class="summary-minmax">
+                  <span id="temp-15d-min">Min: --°C</span>
+                  <span id="temp-15d-max">Max: --°C</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card humidity">
+            <div class="summary-icon">
+              <i class="bx bx-droplet"></i>
+            </div>
+            <div class="summary-info">
+              <h3>Umidade (15 dias)</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="hum-15d-avg">--%</span>
+                <div class="summary-minmax">
+                  <span id="hum-15d-min">Min: --%</span>
+                  <span id="hum-15d-max">Max: --%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card evapotranspiration">
+            <div class="summary-icon">
+              <i class="bx bx-cloud-rain"></i>
+            </div>
+            <div class="summary-info">
+              <h3>Evapotranspiração</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="eto-15d-avg">-- mm/dia</span>
+                <div class="summary-minmax">
+                  <span>Últimos 15 dias</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Controles -->
+      <section class="controls-section">
+        <div class="controls">
+          <div class="control-group">
+            <label for="stats-period-select">
+              <i class="bx bx-calendar"></i>
+              Período de análise:
+            </label>
+            <select id="stats-period-select">
+              <option value="15d" selected>Últimos 15 dias</option>
+              <option value="30d">Últimos 30 dias</option>
+            </select>
+          </div>
+          <button id="refreshStatsBtn" class="refresh-btn">
+            <i class="bx bx-refresh"></i>
+            Atualizar
+          </button>
+        </div>
+      </section>
+
+      <!-- Gráficos de Estatísticas -->
+      <section class="charts-section">
+        <div class="charts-grid">
+          <!-- Gráfico de Médias Temperatura -->
+          <div class="chart-container">
+            <h3>
+              <i class="bx bx-trending-up"></i> Estatísticas de Temperatura
+            </h3>
+            <div id="chart_temp_stats" class="chart"></div>
+          </div>
+
+          <!-- Gráfico de Médias Umidade -->
+          <div class="chart-container">
+            <h3><i class="bx bx-water"></i> Estatísticas de Umidade</h3>
+            <div id="chart_humidity_stats" class="chart"></div>
+          </div>
+
+          <!-- Gráfico de Comparação Mensal -->
+          <div class="chart-container">
+            <h3><i class="bx bx-bar-chart"></i> Comparação de Períodos</h3>
+            <div id="chart_period_comparison" class="chart"></div>
+          </div>
+
+          <!-- Gráfico de Evapotranspiração -->
+          <div class="chart-container">
+            <h3>
+              <i class="bx bx-cloud-rain"></i> Evapotranspiração de Referência
+            </h3>
+            <div id="chart_evapotranspiration" class="chart"></div>
+          </div>
+
+          <!-- Gráfico de Distribuição de Temperatura -->
+          <div class="chart-container">
+            <h3><i class="bx bx-histogram"></i> Distribuição de Temperatura</h3>
+            <div id="chart_temp_distribution" class="chart"></div>
+          </div>
+
+          <!-- Gráfico de Distribuição de Umidade -->
+          <div class="chart-container">
+            <h3>
+              <i class="bx bx bx-pie-chart-alt"></i> Distribuição de Umidade
+            </h3>
+            <div id="chart_humidity_distribution" class="chart"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção de Informações Técnicas -->
+      <section class="technical-info">
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="bx bx-info-circle"></i>
+          </div>
+          <div class="info-content">
+            <h3>Sobre as Estatísticas</h3>
+            <p>
+              As estatísticas apresentadas são calculadas com base nos dados
+              coletados pela estação meteorológica. A
+              <strong>evapotranspiração de referência (ETo)</strong> é estimada
+              usando o método simplificado de Blaney-Criddle modificado,
+              considerando temperatura média e umidade relativa.
+            </p>
+            <div class="info-details">
+              <div class="detail-item">
+                <strong>Média:</strong> Valor médio das medições no período
+              </div>
+              <div class="detail-item">
+                <strong>Mínima:</strong> Menor valor registrado no período
+              </div>
+              <div class="detail-item">
+                <strong>Máxima:</strong> Maior valor registrado no período
+              </div>
+              <div class="detail-item">
+                <strong>ETo:</strong> Evapotranspiração de referência (mm/dia)
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-content">
+          <p>&copy; 2025 Estação Meteorológica IoT - Análise Estatística</p>
+          <p>Dados processados em tempo real para análise meteorológica</p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/static/js/mean.js"></script>
+  </body>
+</html>

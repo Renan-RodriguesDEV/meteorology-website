@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Dia Anterior - Estação Meteorológica IoT</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="header-content">
+          <h1><i class="bx bx-calendar"></i> Dia Anterior</h1>
+          <p class="subtitle">Resumo completo do dia anterior</p>
+        </div>
+        <div class="navigation">
+          <a href="/" class="nav-link"><i class="bx bx-home"></i> Dashboard</a>
+          <a href="/mean" class="nav-link"
+            ><i class="bx bx-bar-chart-alt-2"></i> Médias</a
+          >
+          <a href="/sun" class="nav-link"><i class="bx bx-sun"></i> Sol</a>
+          <a href="/team" class="nav-link"
+            ><i class="bx bx-group"></i> Equipe</a
+          >
+        </div>
+      </header>
+
+      <section class="summary-section">
+        <div class="summary-cards">
+          <div class="summary-card temperature">
+            <div class="summary-icon"><i class="bx bx-thermometer"></i></div>
+            <div class="summary-info">
+              <h3>Temperatura Média</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="temp-avg">--°C</span>
+                <div class="summary-minmax">
+                  <span id="temp-min">Min: --°C</span>
+                  <span id="temp-max">Max: --°C</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="summary-card humidity">
+            <div class="summary-icon"><i class="bx bx-droplet"></i></div>
+            <div class="summary-info">
+              <h3>Umidade Média</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="hum-avg">--%</span>
+                <div class="summary-minmax">
+                  <span id="hum-min">Min: --%</span>
+                  <span id="hum-max">Max: --%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon"><i class="bx bx-list-ol"></i></div>
+            <div class="summary-info">
+              <h3>Leituras</h3>
+              <div class="summary-values">
+                <span class="summary-value" id="count-reads">--</span>
+                <div class="summary-minmax">
+                  <span id="date-yesterday">Data: --</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="charts-section">
+        <div class="charts-grid">
+          <div class="chart-container">
+            <h3>
+              <i class="bx bx-line-chart"></i> Temperatura ao Longo do Dia
+            </h3>
+            <div id="chart_temp_series" class="chart"></div>
+          </div>
+          <div class="chart-container">
+            <h3><i class="bx bx-line-chart"></i> Umidade ao Longo do Dia</h3>
+            <div id="chart_hum_series" class="chart"></div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-content">
+          <p>&copy; 2025 Estação Meteorológica IoT - Dia Anterior</p>
+          <p>Resumo histórico diário</p>
+        </div>
+      </footer>
+    </div>
+    <script src="/static/js/after_day.js"></script>
+  </body>
+</html>
