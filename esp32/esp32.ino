@@ -6,9 +6,9 @@
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
 
-const char *ssid = "JEFFERSON";
-const char *password = "Renanrodrigues2005@";
-const char *SERVER_URL = "http://192.168.1.17:8000/api/readings/"; // Adicionada barra final
+const char *ssid = "Jaly Tôrei";
+const char *password = "admin.root";
+const char *SERVER_URL = "http://192.168.45.16:8000/api/readings/"; // Adicionada barra final
 
 const unsigned long INTERVAL = 5UL * 60UL * 1000UL; // 5 minutos
 unsigned long lastSend = 0;
