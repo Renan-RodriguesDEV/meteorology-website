@@ -3,6 +3,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from database.configs.database import get_session
+from utils.math import calculate_eto
 
 router = APIRouter(prefix="/means", tags=["means"])
 
@@ -133,32 +134,3 @@ def evapotranspiration_daily(period: str, session: Session = Depends(get_session
     except Exception as e:
         print(f"Error in evapotranspiration_daily: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
-
-
-def calculate_eto(temp_celsius, humidity_percent):
-    """
-    Calcula a evapotranspiração de referência usando método simplificado
-    baseado em temperatura e umidade relativa
-    """
-    try:
-        # Método simplificado de Blaney-Criddle modificado
-        # ETo = p * (0.46 * T_mean + 8.13) * k_humidity
-
-        # Fator de correção da umidade
-        humidity_factor = 1.0 - (humidity_percent / 100.0) * 0.3
-
-        # Fator mensal simplificado (assumindo média anual)
-        p_factor = 0.27  # valor médio aproximado
-
-        # Cálculo da ETo em mm/dia
-        eto = p_factor * (0.46 * temp_celsius + 8.13) * humidity_factor
-
-        # Limitar valores extremos
-        if eto < 0:
-            eto = 0
-        elif eto > 15:  # limite máximo razoável
-            eto = 15
-
-        return eto
-    except Exception:
-        return 0.0
