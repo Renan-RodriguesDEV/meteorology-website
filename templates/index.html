@@ -17,30 +17,69 @@
     />
   </head>
   <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <i class="bx bx-devices sidebar-logo"></i>
+        <span class="sidebar-title">Meteorologia</span>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item active">
+          <a href="/" class="sidebar-link">
+            <i class="bx bx-home"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/mean" class="sidebar-link">
+            <i class="bx bx-bar-chart-alt-2"></i>
+            <span>Estatísticas</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/sun" class="sidebar-link">
+            <i class="bx bx-sun"></i>
+            <span>Sol</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/after-day" class="sidebar-link">
+            <i class="bx bx-calendar"></i>
+            <span>Dia Anterior</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/team" class="sidebar-link">
+            <i class="bx bx-group"></i>
+            <span>Equipe</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/download" class="sidebar-link">
+            <i class="bx bx-download"></i>
+            <span>Download CSV</span>
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="status-indicator">
+          <span class="status-dot online"></span>
+          <span>Online</span>
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <!-- Header -->
       <header class="header">
         <div class="header-content">
+          <div class="menu-toggle" id="menu-toggle">
+            <i class="bx bx-menu"></i>
+          </div>
           <h1><i class="bx bx-devices"></i> Estação Meteorológica IoT</h1>
           <p class="subtitle">Monitoramento em tempo real com ESP32</p>
         </div>
         <div class="navigation">
-          <a href="/mean" class="nav-link">
-            <i class="bx bx-bar-chart-alt-2"></i>
-            Estatísticas
-          </a>
-          <a href="/sun" class="nav-link">
-            <i class="bx bx-sun"></i>
-            Sol
-          </a>
-          <a href="/after-day" class="nav-link">
-            <i class="bx bx-calendar"></i>
-            Dia Anterior
-          </a>
-          <a href="/team" class="nav-link">
-            <i class="bx bx-group"></i>
-            Equipe
-          </a>
           <div class="status-indicator">
             <span class="status-dot online"></span>
             <span>Online</span>

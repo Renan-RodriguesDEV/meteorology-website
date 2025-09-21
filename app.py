@@ -57,5 +57,10 @@ def read_after_day(request: Request):
     return templates.TemplateResponse("after_day.html", {"request": request})
 
 
+@app.get("/download", response_class=HTMLResponse)
+def read_download(request: Request):
+    return templates.TemplateResponse("download.html", {"request": request})
+
+
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)

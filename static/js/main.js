@@ -15,26 +15,145 @@ async function fetchJSON(url) {
 
 // Inicialização da aplicação
 function initializeApp() {
-  // Carregar dados iniciais
-  drawAll();
-  updateCurrentReading();
+  // Detecta se esta página tem os elementos do dashboard
+  const hasCharts =
+    document.getElementById("chart_24h_temp") ||
+    document.getElementById("chart_24h_hum") ||
+    document.getElementById("chart_15d_temp") ||
+    document.getElementById("chart_15d_hum") ||
+    document.getElementById("chart_monthly_temp") ||
+    document.getElementById("chart_monthly_hum");
+
+  const hasCurrentCards =
+    document.getElementById("current-temp") &&
+    document.getElementById("current-humidity") &&
+    document.getElementById("last-reading-time") &&
+    document.getElementById("lastUpdate");
+
+  // Carregar dados iniciais apenas se houver área de gráficos
+  if (hasCharts) {
+    drawAll();
+  }
+  if (hasCurrentCards) {
+    updateCurrentReading();
+  }
 
   // Configurar atualizações automáticas
-  setInterval(updateCurrentReading, UPDATE_INTERVAL);
+  if (hasCurrentCards) {
+    setInterval(updateCurrentReading, UPDATE_INTERVAL);
+  }
 
   // Configurar eventos
-  document.getElementById("refreshBtn").addEventListener("click", function () {
-    showLoadingState();
-    drawAll();
-    updateCurrentReading();
-  });
+  const refreshBtnEl = document.getElementById("refreshBtn");
+  if (refreshBtnEl) {
+    refreshBtnEl.addEventListener("click", function () {
+      showLoadingState();
+      if (hasCharts) drawAll();
+      if (hasCurrentCards) updateCurrentReading();
+    });
+  }
 
-  // Event listener para seletor de período (futuro)
-  document
-    .getElementById("period-select")
-    .addEventListener("change", function () {
+  // Event listener para seletor de período
+  const periodSelectEl = document.getElementById("period-select");
+  if (periodSelectEl) {
+    periodSelectEl.addEventListener("change", function () {
       console.log("Período selecionado:", this.value);
     });
+  }
+
+  // Funcionalidade para o toggle da sidebar
+  const menuToggleEl = document.getElementById("menu-toggle");
+  if (menuToggleEl) {
+    menuToggleEl.addEventListener("click", function () {
+      const sidebar = document.querySelector(".sidebar");
+      if (!sidebar) return;
+      // Em mobile, a classe .active faz a sidebar deslizar; em desktop mantemos fixo
+      sidebar.classList.toggle("active");
+    });
+  }
+
+  // Funcionalidade para modal de download
+  const downloadBtn = document.getElementById("downloadBtn");
+  const downloadModal = document.getElementById("downloadModal");
+  const closeModal = document.querySelector(".close-modal");
+  const modalDownloadBtn = document.getElementById("download-btn");
+
+  // Define data inicial padrão (uma semana atrás)
+  const today = new Date();
+  const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  // Formata a data para o input datetime-local (formato: YYYY-MM-DDTHH:MM)
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  const downloadDateEl = document.getElementById("download-date");
+  if (downloadDateEl) {
+    downloadDateEl.value = formatDate(oneWeekAgo);
+  }
+
+  // Abre modal ao clicar no botão download
+  if (downloadBtn && downloadModal) {
+    downloadBtn.addEventListener("click", function (e) {
+      e.preventDefault(); // Previne a navegação para #
+      downloadModal.style.display = "block";
+    });
+  }
+
+  // Fecha modal
+  if (closeModal && downloadModal) {
+    closeModal.addEventListener("click", function () {
+      downloadModal.style.display = "none";
+    });
+  }
+
+  // Fecha modal ao clicar fora dele
+  if (downloadModal) {
+    window.addEventListener("click", function (event) {
+      if (event.target == downloadModal) {
+        downloadModal.style.display = "none";
+      }
+    });
+  }
+
+  // Inicia o download ao clicar no botão dentro do modal
+  if (modalDownloadBtn && downloadModal) {
+    modalDownloadBtn.addEventListener("click", function () {
+      const selectedDateInput = document.getElementById("download-date");
+      const selectedDate = selectedDateInput ? selectedDateInput.value : "";
+      if (!selectedDate) {
+        alert("Por favor, selecione uma data!");
+        return;
+      }
+
+      const downloadUrl = `/api/readings/file?timestamp=${encodeURIComponent(
+        selectedDate
+      )}`;
+
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = `readings_${selectedDate.replace(/[:\-T]/g, "_")}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      downloadModal.style.display = "none";
+    });
+  }
+
+  // Ajusta layout ao redimensionar a janela
+  window.addEventListener("resize", function () {
+    const container = document.querySelector(".container");
+    if (container) {
+      // Remove qualquer margem inline; layout controlado só por CSS
+      container.style.marginLeft = "";
+    }
+  });
 }
 
 function showLoadingState() {
@@ -116,16 +235,53 @@ async function drawAll() {
 }
 
 function drawLine(data, xField, yField, title, elementId) {
-  const rows = [["Data", title]];
-  data.forEach((r) => rows.push([new Date(r[xField]), Number(r[yField])]));
-  drawChart(rows, title, elementId, "LineChart");
+  const rows = [];
+  data.forEach((r) => {
+    let date = typeof r[xField] === "string" ? new Date(r[xField]) : r[xField];
+    if (isNaN(date?.getTime?.())) return;
+    rows.push([date, Number(r[yField])]);
+  });
+
+  const dt = new google.visualization.DataTable();
+  dt.addColumn("datetime", "Data");
+  dt.addColumn("number", title);
+  dt.addRows(rows);
+
+  const options = {
+    title: title,
+    backgroundColor: "transparent",
+    titleTextStyle: { color: "#e0e6ed", fontSize: 16 },
+    hAxis: {
+      textStyle: { color: "#8892b0" },
+      gridlines: { color: "#2a2a3e" },
+      format: "dd/MM HH:mm",
+    },
+    vAxis: { textStyle: { color: "#8892b0" }, gridlines: { color: "#2a2a3e" } },
+    legend: { position: "none" },
+    curveType: "function",
+    colors: ["#64ffda"],
+    height: 380,
+    chartArea: { left: 60, top: 60, width: "85%", height: "70%" },
+  };
+
+  const chart = new google.visualization.LineChart(
+    document.getElementById(elementId)
+  );
+  chart.draw(dt, options);
 }
 
 function drawAreaChart(data, xField, yField, title, elementId, color) {
-  const rows = [["Data", title]];
-  data.forEach((r) => rows.push([new Date(r[xField]), Number(r[yField])]));
+  const rows = [];
+  data.forEach((r) => {
+    let date = typeof r[xField] === "string" ? new Date(r[xField]) : r[xField];
+    if (isNaN(date?.getTime?.())) return;
+    rows.push([date, Number(r[yField])]);
+  });
 
-  const dt = google.visualization.arrayToDataTable(rows);
+  const dt = new google.visualization.DataTable();
+  dt.addColumn("datetime", "Data");
+  dt.addColumn("number", title);
+  dt.addRows(rows);
   const options = {
     title: title,
     backgroundColor: "transparent",
@@ -155,17 +311,17 @@ function drawAreaChart(data, xField, yField, title, elementId, color) {
 }
 
 function drawColumnChart(data, xField, yField, title, elementId, color) {
-  const rows = [["Hora", title]];
+  const rows = [];
   data.forEach((r) => {
-    const date = new Date(r[xField]);
-    const timeStr = date.toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    rows.push([timeStr, Number(r[yField])]);
+    let date = typeof r[xField] === "string" ? new Date(r[xField]) : r[xField];
+    if (isNaN(date?.getTime?.())) return;
+    rows.push([date, Number(r[yField])]);
   });
 
-  const dt = google.visualization.arrayToDataTable(rows);
+  const dt = new google.visualization.DataTable();
+  dt.addColumn("datetime", "Hora");
+  dt.addColumn("number", title);
+  dt.addRows(rows);
   const options = {
     title: title,
     backgroundColor: "transparent",
@@ -173,6 +329,7 @@ function drawColumnChart(data, xField, yField, title, elementId, color) {
     hAxis: {
       textStyle: { color: "#8892b0" },
       gridlines: { color: "#2a2a3e" },
+      format: "HH:mm",
     },
     vAxis: {
       textStyle: { color: "#8892b0" },
@@ -191,10 +348,17 @@ function drawColumnChart(data, xField, yField, title, elementId, color) {
 }
 
 function drawSmoothLine(data, xField, yField, title, elementId, color) {
-  const rows = [["Data", title]];
-  data.forEach((r) => rows.push([new Date(r[xField]), Number(r[yField])]));
+  const rows = [];
+  data.forEach((r) => {
+    let date = typeof r[xField] === "string" ? new Date(r[xField]) : r[xField];
+    if (isNaN(date?.getTime?.())) return;
+    rows.push([date, Number(r[yField])]);
+  });
 
-  const dt = google.visualization.arrayToDataTable(rows);
+  const dt = new google.visualization.DataTable();
+  dt.addColumn("datetime", "Data");
+  dt.addColumn("number", title);
+  dt.addRows(rows);
   const options = {
     title: title,
     backgroundColor: "transparent",

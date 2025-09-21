@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Download de Leituras - Estação Meteorológica IoT</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="header-content">
+          <h1><i class="bx bx-download"></i> Download de Leituras</h1>
+          <p class="subtitle">Exporte os dados em CSV a partir de uma data</p>
+        </div>
+      </header>
+
+      <section class="controls-section">
+        <div class="controls">
+          <div class="control-group">
+            <label for="download-date">
+              <i class="bx bx-calendar"></i>
+              Data e hora inicial
+            </label>
+            <input type="datetime-local" id="download-date" />
+          </div>
+          <button id="doDownload" class="refresh-btn">
+            <i class="bx bx-download"></i>
+            Baixar CSV
+          </button>
+        </div>
+        <p class="subtitle" style="margin-top: 12px">
+          O arquivo conterá os registros desde a data selecionada até agora.
+        </p>
+      </section>
+
+      <footer class="footer">
+        <p>&copy; 2025 Estação Meteorológica IoT</p>
+      </footer>
+    </div>
+
+    <script>
+      function pad2(n) {
+        return String(n).padStart(2, "0");
+      }
+      function defaultLocalDateTime(daysAgo) {
+        const now = new Date();
+        const past = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+        const y = past.getFullYear();
+        const m = pad2(past.getMonth() + 1);
+        const d = pad2(past.getDate());
+        const hh = pad2(past.getHours());
+        const mm = pad2(past.getMinutes());
+        return `${y}-${m}-${d}T${hh}:${mm}`;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const input = document.getElementById("download-date");
+        if (input) input.value = defaultLocalDateTime(365);
+        document.getElementById("doDownload")?.addEventListener("click", () => {
+          const val = input?.value;
+          if (!val) {
+            alert("Selecione a data inicial");
+            return;
+          }
+          const url = `/api/readings/file?timestamp=${encodeURIComponent(val)}`;
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `readings_${val.replace(/[:\-T]/g, "_")}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        });
+      });
+    </script>
+  </body>
+</html>
